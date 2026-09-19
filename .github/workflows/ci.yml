@@ -1,0 +1,28 @@
+name: FitFlow CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify-repository-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify Architecture & Docs
+        run: |
+          echo "Verifying FitFlow project files..."
+          test -f README.md
+          test -f .gitignore
+          test -f docs/adrs/adr-001.md
+          test -f docs/architecture/comparison-matrix.md
+          echo "All required architecture artifacts verified successfully!"
