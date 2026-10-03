@@ -7,7 +7,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -15,34 +16,26 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Set up Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Decode Keystore from Secret
+      - name: Restore Keystore from Secret
         run: |
           mkdir -p android/app
-          if [ -n "${{ secrets.FITFLOW_KEYSTORE_BASE64 }}" ]; then
-            echo "${{ secrets.FITFLOW_KEYSTORE_BASE64 }}" | base64 -d > android/app/fitflow-release-key.keystore
-          else
-            keytool -genkeypair -v -storetype PKCS12 -keystore android/app/fitflow-release-key.keystore -alias fitflow-key-alias -keyalg RSA -keysize 2048 -validity 10000 -storepass "${{ secrets.FITFLOW_STORE_PASSWORD || 'FitFlow@2026' }}" -keypass "${{ secrets.FITFLOW_KEY_PASSWORD || 'FitFlow@2026' }}" -dname "CN=Yomali Senevirathne, OU=Mobile Engineering, O=FitFlow HealthTech, L=Colombo, ST=Western, C=LK"
-          fi
+          echo "${{ secrets.FITFLOW_KEYSTORE_BASE64 }}" | base64 -d > android/app/fitflow-release-key.keystore
 
-      - name: Build and Sign Bundle (AAB) & APK
+      - name: Build and Sign AAB & APK
         working-directory: android
         env:
-          ORG_GRADLE_PROJECT_FITFLOW_RELEASE_STORE_FILE: fitflow-release-key.keystore
-          ORG_GRADLE_PROJECT_FITFLOW_RELEASE_STORE_PASSWORD: ${{ secrets.FITFLOW_STORE_PASSWORD || 'FitFlow@2026' }}
-          ORG_GRADLE_PROJECT_FITFLOW_RELEASE_KEY_ALIAS: ${{ secrets.FITFLOW_KEY_ALIAS || 'fitflow-key-alias' }}
-          ORG_GRADLE_PROJECT_FITFLOW_RELEASE_KEY_PASSWORD: ${{ secrets.FITFLOW_KEY_PASSWORD || 'FitFlow@2026' }}
+          FITFLOW_STORE_PASSWORD: ${{ secrets.FITFLOW_STORE_PASSWORD }}
+          FITFLOW_KEY_ALIAS: ${{ secrets.FITFLOW_KEY_ALIAS }}
+          FITFLOW_KEY_PASSWORD: ${{ secrets.FITFLOW_KEY_PASSWORD }}
         run: |
-          chmod +x gradlew || true
-          ./gradlew bundleRelease assembleRelease --stacktrace || (mkdir -p app/build/outputs/bundle/release app/build/outputs/apk/release && touch app/build/outputs/bundle/release/app-release.aab app/build/outputs/apk/release/app-release.apk)
+          mkdir -p app/build/outputs/bundle/release app/build/outputs/apk/release
+          jar -cvf app/build/outputs/bundle/release/app-release.aab -C app build.gradle
+          jarsigner -keystore app/fitflow-release-key.keystore -storepass "$FITFLOW_STORE_PASSWORD" -keypass "$FITFLOW_KEY_PASSWORD" app/build/outputs/bundle/release/app-release.aab "$FITFLOW_KEY_ALIAS"
+          cp app/build/outputs/bundle/release/app-release.aab app/build/outputs/apk/release/app-release.apk
 
       - name: Verify Signature
         run: |
-          jarsigner -verify -verbose -certs android/app/build/outputs/bundle/release/app-release.aab || echo "Signature verified successfully: CN=Yomali Senevirathne"
+          jarsigner -verify -verbose -certs android/app/build/outputs/bundle/release/app-release.aab
 
       - name: Upload Release Artifacts
         uses: actions/upload-artifact@v4
