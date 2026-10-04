@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Google Play Console - FitFlow: AI Fitness Coach</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
+    body { background: #f8f9fa; color: #202124; display: flex; flex-direction: column; height: 100vh; font-size: 14px; }
+    /* Topbar */
+    .topbar { background: #ffffff; border-bottom: 1px solid #dadce0; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+    .logo-area { display: flex; align-items: center; gap: 12px; font-size: 18px; color: #5f6368; font-weight: 500; }
+    .logo-area span { color: #1a73e8; font-weight: 700; }
+    .app-selector { background: #e8f0fe; color: #1967d2; padding: 6px 14px; border-radius: 18px; font-weight: 500; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+    /* Layout */
+    .main-wrap { display: flex; flex: 1; overflow: hidden; }
+    .sidebar { width: 250px; background: #ffffff; border-right: 1px solid #dadce0; padding: 15px 0; overflow-y: auto; }
+    .sidebar-item { padding: 10px 24px; color: #5f6368; display: flex; align-items: center; gap: 12px; font-weight: 500; cursor: pointer; }
+    .sidebar-item.active { background: #e8f0fe; color: #1a73e8; border-radius: 0 20px 20px 0; }
+    .sidebar-header { font-size: 11px; font-weight: 700; color: #80868b; text-transform: uppercase; padding: 16px 24px 8px; }
+    /* Content */
+    .content { flex: 1; padding: 24px 36px; overflow-y: auto; background: #f8f9fa; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .page-title { font-size: 22px; font-weight: 500; color: #202124; }
+    .status-badge { background: #e6f4ea; color: #137333; padding: 4px 12px; border-radius: 4px; font-weight: 500; font-size: 12px; border: 1px solid #ceead6; }
+    .card { background: #ffffff; border: 1px solid #dadce0; border-radius: 8px; padding: 24px; margin-bottom: 24px; }
+    .card-title { font-size: 16px; font-weight: 500; margin-bottom: 6px; }
+    .card-desc { font-size: 13px; color: #5f6368; margin-bottom: 16px; }
+    .field-group { margin-bottom: 18px; }
+    .field-label { display: block; font-weight: 500; font-size: 13px; color: #3c4043; margin-bottom: 6px; }
+    .field-input { width: 100%; max-width: 650px; border: 1px solid #dadce0; border-radius: 4px; padding: 10px 12px; font-size: 14px; color: #202124; background: #fff; }
+    .field-hint { font-size: 12px; color: #80868b; margin-top: 4px; }
+    /* Graphics preview */
+    .graphic-preview { border: 1px dashed #dadce0; border-radius: 6px; padding: 12px; display: inline-block; background: #fafafa; margin-right: 14px; text-align: center; }
+    .graphic-preview img { max-height: 140px; border-radius: 4px; display: block; margin-bottom: 8px; }
+    .graphic-meta { font-size: 11px; color: #5f6368; }
+    .btn-save { background: #1a73e8; color: #fff; padding: 8px 24px; border-radius: 4px; font-weight: 500; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="logo-area">
+      <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#4285F4" d="M3 20.5V3.5C3 2.91 3.34 2.39 3.84 2.15L13.69 12L3.84 21.85C3.34 21.6 3 21.09 3 20.5Z"/><path fill="#FBBC04" d="M16.81 15.12L13.69 12L16.81 8.88L20.27 10.85C21.24 11.4 21.24 12.6 20.27 13.15L16.81 15.12Z"/><path fill="#34A853" d="M13.69 12L3.84 21.85C4.19 22.03 4.62 22.02 5.02 21.79L16.81 15.12L13.69 12Z"/><path fill="#EA4335" d="M13.69 12L16.81 8.88L5.02 2.21C4.62 1.98 4.19 1.97 3.84 2.15L13.69 12Z"/></svg>
+      Google Play Console
+    </div>
+    <div class="app-selector">
+      <span>●</span> FitFlow: AI Fitness Coach (com.fitflowhealthtech.fitflow) - v2.0.0
+    </div>
+    <div style="font-weight: 500; color: #5f6368;">Yomali Senevirathne</div>
+  </div>
+
+  <div class="main-wrap">
+    <div class="sidebar">
+      <div class="sidebar-header">Release</div>
+      <div class="sidebar-item">Dashboard</div>
+      <div class="sidebar-item">Internal testing</div>
+      <div class="sidebar-item">Production</div>
+      
+      <div class="sidebar-header">Grow</div>
+      <div class="sidebar-item active">Main store listing</div>
+      <div class="sidebar-item">Store listing experiments</div>
+      
+      <div class="sidebar-header">Policy</div>
+      <div class="sidebar-item">App content & Data safety</div>
+    </div>
+
+    <div class="content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Main store listing</h1>
+          <p style="color: #5f6368; font-size: 13px; margin-top: 4px;">English (United States) – en-US</p>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <span class="status-badge">✔ Ready for Review (Build 200)</span>
+          <button class="btn-save">Save changes</button>
+        </div>
+      </div>
+
+      <!-- App details -->
+      <div class="card">
+        <h2 class="card-title">Listing details</h2>
+        <p class="card-desc">Provide user-facing titles and descriptions for Google Play users.</p>
+
+        <div class="field-group">
+          <label class="field-label">App name</label>
+          <input class="field-input" type="text" value="FitFlow: AI Fitness Coach" readonly>
+          <div class="field-hint">25 / 30 characters</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Short description</label>
+          <input class="field-input" type="text" value="AI workout plans, snap-and-log meal tracking and private fitness circles." readonly>
+          <div class="field-hint">73 / 80 characters</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Full description</label>
+          <textarea class="field-input" rows="6" readonly style="font-size: 13px; line-height: 1.5;">Your fitness, all in one place. Train. Track. Improve.
+
+FitFlow is the fitness companion that adapts to your life, not the other way round. Whether you have 15 minutes or an hour, FitFlow builds the right session for you.
+
+AI DAILY FLOW - Personalised workout recommendations based on your schedule, goals, equipment and recovery level.
+SNAP & LOG NUTRITION - Point your camera at a meal and log it in seconds.
+PRIVATE ACCOUNTABILITY CIRCLES - Join challenges and share milestones with friends in a safe, controlled space.</textarea>
+          <div class="field-hint">758 / 4000 characters</div>
+        </div>
+      </div>
+
+      <!-- Graphics -->
+      <div class="card">
+        <h2 class="card-title">Graphics & Store Assets</h2>
+        <p class="card-desc">Uploaded assets meeting Google Play size guidelines.</p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+          <div class="graphic-preview">
+            <img src="../feature-graphic/feature-graphic-1024x500.png" alt="Feature Graphic" style="max-height: 110px;">
+            <div class="graphic-meta"><b>Feature Graphic</b><br>1024 × 500 px (Uploaded)</div>
+          </div>
+          <div class="graphic-preview">
+            <img src="home-dashboard.png" alt="Screenshot 1" style="max-height: 140px;">
+            <div class="graphic-meta"><b>Dashboard</b><br>1080 × 1920 (Uploaded)</div>
+          </div>
+          <div class="graphic-preview">
+            <img src="nutrition-logger.png" alt="Screenshot 2" style="max-height: 140px;">
+            <div class="graphic-meta"><b>Nutrition</b><br>1080 × 1920 (Uploaded)</div>
+          </div>
+          <div class="graphic-preview">
+            <img src="community-feed.png" alt="Screenshot 3" style="max-height: 140px;">
+            <div class="graphic-meta"><b>Social Feed</b><br>1080 × 1920 (Uploaded)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Signed AAB details -->
+      <div class="card">
+        <h2 class="card-title">Release Artifact (Internal Testing Track)</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px;">
+          <tr style="border-bottom: 1px solid #eee; text-align: left; color: #5f6368;">
+            <th style="padding: 8px 0;">Version</th>
+            <th>Version Code</th>
+            <th>Target SDK</th>
+            <th>Artifact</th>
+            <th>Signing</th>
+            <th>Status</th>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; font-weight: 500;">2.0.0</td>
+            <td>200</td>
+            <td>Android 16 (API 36)</td>
+            <td><code>app-release.aab</code></td>
+            <td>Google Play App Signing (Enrolled)</td>
+            <td><span class="status-badge">Available to 100 testers</span></td>
+          </tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
