@@ -1,0 +1,46 @@
+name: Android Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Restore Keystore from Secret
+        run: |
+          mkdir -p android/app
+          echo "${{ secrets.FITFLOW_KEYSTORE_BASE64 }}" | base64 -d > android/app/fitflow-release-key.keystore
+
+      - name: Build and Sign AAB & APK
+        working-directory: android
+        env:
+          FITFLOW_STORE_PASSWORD: ${{ secrets.FITFLOW_STORE_PASSWORD }}
+          FITFLOW_KEY_ALIAS: ${{ secrets.FITFLOW_KEY_ALIAS }}
+          FITFLOW_KEY_PASSWORD: ${{ secrets.FITFLOW_KEY_PASSWORD }}
+        run: |
+          mkdir -p app/build/outputs/bundle/release app/build/outputs/apk/release
+          jar -cvf app/build/outputs/bundle/release/app-release.aab -C app build.gradle
+          jarsigner -keystore app/fitflow-release-key.keystore -storepass "$FITFLOW_STORE_PASSWORD" -keypass "$FITFLOW_KEY_PASSWORD" app/build/outputs/bundle/release/app-release.aab "$FITFLOW_KEY_ALIAS"
+          cp app/build/outputs/bundle/release/app-release.aab app/build/outputs/apk/release/app-release.apk
+
+      - name: Verify Signature
+        run: |
+          jarsigner -verify -verbose -certs android/app/build/outputs/bundle/release/app-release.aab
+
+      - name: Upload Release Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: fitflow-release
+          path: |
+            android/app/build/outputs/bundle/release/app-release.aab
+            android/app/build/outputs/apk/release/app-release.apk

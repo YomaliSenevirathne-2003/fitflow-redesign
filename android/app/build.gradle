@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 apply plugin: "com.android.application"
 
 android {
@@ -38,4 +39,46 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+=======
+apply plugin: "com.android.application"
+
+android {
+    namespace "com.fitflow.app"
+    compileSdkVersion 36
+
+    defaultConfig {
+        applicationId "com.fitflow.app"
+        minSdkVersion 24
+        targetSdkVersion 36
+        versionCode 200          // Build version code for v2.0.0
+        versionName "2.0.0"      // Public release version name
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            if (project.hasProperty('FITFLOW_RELEASE_STORE_FILE')) {
+                storeFile file(FITFLOW_RELEASE_STORE_FILE)
+                storePassword FITFLOW_RELEASE_STORE_PASSWORD
+                keyAlias FITFLOW_RELEASE_KEY_ALIAS
+                keyPassword FITFLOW_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            // Enable code minification and tree shaking (R8 / ProGuard)
+            minifyEnabled true
+            // Shrink unused resources to optimize AAB/APK size
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            // Apply secure signing config
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+>>>>>>> 71f4b2a0244c9e9b524511f91ac320dfda73277e
 }
